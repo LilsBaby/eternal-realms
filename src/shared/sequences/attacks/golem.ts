@@ -9,26 +9,20 @@ export = {
 			name: "BasicAttack",
 		},
 
-	Roll: {
+	GroundSlam: {
 		name: "Roll",
 		condition: ({ body }) => {
+			const targetPos = body.character.GetAttribute("TargetPosition") as Vector3;
+	if (!targetPos) return BehaviorStatus.Failure;
+			const in_ground_slam_view = inPointOfView(targetPos, body.rootPart.CFrame, math.huge, 25)
+			if (in_ground_slam_view) {
+				return BehaviorStatus.Success
+			}
 			return BehaviorStatus.Failure;
 		},
 		execute: ({ world, entity, body }) => {
-			print("should roll here!")
-			/**
-			 * world.set(entity, c.PlayAnimation, {
-				path: "SwordThrow",
-				looped: false,
-				priority: Enum.AnimationPriority.Action2,
-				stopOtherAnimations: true,
-				animationPlayInfo: {},
-				marker: "Throw",
-				markerReached: () => {
-
-				},
-			});
-			 */
+			const target = world.target(entity, c.TargetedBy)
+			if (!target) return BehaviorStatus.Failure
 			
 
 			return BehaviorStatus.Failure;

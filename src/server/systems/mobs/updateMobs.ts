@@ -29,9 +29,10 @@ function targetNearForAttack({ world, entity, mob, body }: MobBehaviorContext): 
 }
 
 function targetNearMob({ world, entity, mob, body }: MobBehaviorContext): BehaviorStatus {
-	const targetPosition = findTarget(mob.name, body.character.GetPivot(), 90, 35);
-	if (targetPosition && targetPosition !== Vector3.zero) {
+	const [ target, targetPosition ] = findTarget(mob.name, body.character.GetPivot(), 90, 35);
+	if (targetPosition && target && targetPosition !== Vector3.zero) {
 		body.character.SetAttribute("TargetPosition", targetPosition);
+		setEntity.targetedBy(entity, target)
 		// setEntity.targetedBy(entity, target);
 		return BehaviorStatus.Success;
 	}

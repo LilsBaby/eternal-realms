@@ -59,7 +59,6 @@ export const MobWaypoint = component<Waypoint>("Waypoint");
 
 // mobs
 export const Mob = component<{ name: MobName; spawner: BasePart; spawnPoint: Vector3 }>("Mob");
-export const MobAttackCoolDown = component<{ timeLeft: number }>("MobAttackCoolDown")
 export const BTree = component<BehaviorTree<MobBehaviorContext>>("BehaviorTree")
 export const TargetedBy = component("TargetedBy");
 

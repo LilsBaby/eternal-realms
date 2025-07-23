@@ -49,7 +49,8 @@ export function findTarget(
 	startCFrame: CFrame,
 	fov: number,
 	distance: number,
-): Vector3  {
+): [Entity, Vector3] | [] {
+	const entitiesMap = new Map<CharacterTree, Entity>();
 	let targets: Array<CharacterTree> = [];
 	for (const { records, columns, entities } of c.world
 		.query(c.Body)
@@ -58,11 +59,13 @@ export function findTarget(
 		const targetIndex = records[c.Body - 1];
 		const targetList = columns[targetIndex - 1] as CharacterTree[];
 		targets = [...targets, ...targetList];
-		
+		targets.forEach((tree, index) => {
+			entitiesMap.set(tree, entities.find((_, indexToCheck) => indexToCheck === index) as Entity);
+		});
 	}
 
 	let closestPosition: Vector3 = Vector3.zero;
-	if (targets.isEmpty()) return closestPosition;
+	if (targets.isEmpty()) return [];
 	const closestTarget = targets.reduce((closest, current) => {
 		const currentDistance = current.rootPart.Position.sub(startCFrame.Position).Magnitude;
 		const closestDistance = closest.rootPart.Position.sub(startCFrame.Position).Magnitude;
@@ -78,5 +81,5 @@ export function findTarget(
 		}
 	}
 
-	return closestPosition
+	return [entitiesMap.get(closestTarget)!, closestPosition];
 }
